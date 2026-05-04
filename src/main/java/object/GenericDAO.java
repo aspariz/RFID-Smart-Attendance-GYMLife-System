@@ -1,50 +1,52 @@
-package object;
+package com.mycompany.gymlife1.object;
 
+import com.mongodb.client.MongoCollection;
+import org.bson.conversions.Bson;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementasi Generic DAO untuk MongoDB yang efisien dan reusable.
+ * @param <T>
+ */
+
 public class GenericDAO<T> implements BaseDAO<T> {
+    private final MongoCollection<T> collection;
+    private final Class<T> clazz;
 
-    private final String collectionName;
-    private final Class<T> clazz; 
-    private List<T> dataList = new ArrayList<>();
-
+    // Konstruktor menerima nama koleksi dan kelas entitas untuk mapping otomatis
     public GenericDAO(String collectionName, Class<T> clazz) {
-        this.collectionName = collectionName;
         this.clazz = clazz;
+        this.collection = MongoManager.getDatabase().getCollection(collectionName, clazz);
     }
 
     @Override
     public void save(T entity) {
-        dataList.add(entity);
-        System.out.println("Menyimpan objek tipe: " + clazz.getSimpleName() + 
-                           " ke koleksi: " + collectionName);
+        collection.insertOne(entity);
     }
 
     @Override
-    public void update(int index, T entity) {
-        if (index >= 0 && index < dataList.size()) {
-            dataList.set(index, entity);
-        }
+    public void update(Bson filter, T entity) {
+        collection.replaceOne(filter, entity);
     }
 
     @Override
-    public void delete(int index) {
-        if (index >= 0 && index < dataList.size()) {
-            dataList.remove(index);
-        }
+    public void delete(Bson filter) {
+        collection.deleteOne(filter);
     }
 
     @Override
     public List<T> findAll() {
-        return dataList;
+        return collection.find().into(new ArrayList<>());
     }
 
     @Override
-    public T findByIndex(int index) {
-        if (index >= 0 && index < dataList.size()) {
-            return dataList.get(index);
-        }
-        return null;
+    public T findOne(Bson filter) {
+        return collection.find(filter).first();
+    }
+
+    @Override
+    public List<T> findMany(Bson filter) {
+        return collection.find(filter).into(new ArrayList<>());
     }
 }

@@ -1,17 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
-package object;
+package com.mycompany.gymlife1.object;
+
+import org.bson.conversions.Bson;
 import java.util.List;
 /**
  *
  * @author bsame
+ * @param <T>
  */
 public interface BaseDAO<T> {
     void save(T entity);
-    void update(int index, T entity);
-    void delete(int index);
+    void update(Bson filter , T entity);
+    void delete(Bson filter );
+    
     List<T> findAll();
-    T findByIndex(int index);    
+    T findOne(Bson filter);
+    List<T> findMany(Bson filter);
 }
