@@ -1,4 +1,4 @@
-package com.mycompany.gymlife1.object;
+package UTILY;
 
 // Import untuk konfigurasi koneksi MongoDB
 import com.mongodb.MongoClientSettings;       // Berisi pengaturan default MongoDB client

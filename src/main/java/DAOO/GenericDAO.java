@@ -1,6 +1,8 @@
-package com.mycompany.gymlife1.object;
+package DAOO;
 
 import com.mongodb.client.MongoCollection;
+import DAOO.BaseDAO;
+import UTILY.MongoManager;
 import org.bson.conversions.Bson;
 import java.util.ArrayList;
 import java.util.List;

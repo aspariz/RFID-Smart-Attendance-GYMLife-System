@@ -1,4 +1,4 @@
-package com.mycompany.gymlife1.object;
+package UTILY;
 
 import com.mongodb.client.MongoDatabase; // Interface untuk merepresentasikan database MongoDB
 import org.bson.Document;                // Class untuk membuat dokumen BSON (format data MongoDB)

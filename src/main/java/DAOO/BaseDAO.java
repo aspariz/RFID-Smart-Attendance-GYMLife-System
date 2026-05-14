@@ -1,4 +1,4 @@
-package com.mycompany.gymlife1.object;
+package DAOO;
 
 import org.bson.conversions.Bson;
 import java.util.List;
