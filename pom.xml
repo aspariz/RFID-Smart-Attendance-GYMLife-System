@@ -5,10 +5,24 @@
     <artifactId>GYMLife1</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.ituhn.pemkom2.MainApp</exec.mainClass>
+        <exec.mainClass>GUII.admin</exec.mainClass>
     </properties>
      <dependencies>
         <!-- Driver NoSQL MongoDB (Pertemuan 5) -->
@@ -17,19 +31,10 @@
             <artifactId>mongodb-driver-sync</artifactId>
             <version>5.0.0</version>
         </dependency>
-<<<<<<< HEAD
-        
-        <!-- Library FlatLaf -->
-        <dependency>
-            <groupId>com.formdev</groupId>
-            <artifactId>flatlaf</artifactId>
-            <version>3.4.1</version>
-=======
          <dependency>
             <groupId>com.fazecast</groupId>
             <artifactId>jSerialComm</artifactId>
             <version>2.10.4</version>
->>>>>>> aspa
         </dependency>
      </dependencies>
 </project>
