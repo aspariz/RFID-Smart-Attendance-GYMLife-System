@@ -20,28 +20,15 @@ public class MongoManager {
     private static final String DATABASE_NAME = "gymlife_db";
 
     public static MongoDatabase getDatabase() {
-
-        // Cek apakah koneksi belum pernah dibuat (lazy initialization)
-        if (mongoClient == null) {
-
-            // Gabungkan codec default MongoDB dengan codec POJO otomatis
-            // - getDefaultCodecRegistry() : mendukung tipe dasar (String, Integer, dll)
-            // - PojoCodecProvider.automatic(true) : otomatis mapping class Java (POJO) ke dokumen BSON
-            CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
-                MongoClientSettings.getDefaultCodecRegistry(),
-                CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build())
-            );
-
-            // Buat koneksi baru ke MongoDB yang berjalan di localhost port 27017
-            mongoClient = MongoClients.create("mongodb://localhost:27017");
-
-            // Ambil database "gymlife_db" dan terapkan codec registry yang sudah dikonfigurasi
-            // withCodecRegistry() memastikan POJO bisa otomatis dikonversi ke/dari dokumen MongoDB
-            return mongoClient.getDatabase(DATABASE_NAME).withCodecRegistry(pojoCodecRegistry);
-        }
-
-        // Jika koneksi sudah ada, langsung kembalikan database tanpa membuat koneksi baru
-        // (tanpa pojoCodecRegistry karena hanya dipakai saat pertama kali inisialisasi)
-        return mongoClient.getDatabase(DATABASE_NAME);
+    CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
+        MongoClientSettings.getDefaultCodecRegistry(),
+        CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build())
+    );
+    
+    if (mongoClient == null) {
+        mongoClient = MongoClients.create("mongodb://localhost:27017");
     }
+    
+    return mongoClient.getDatabase(DATABASE_NAME).withCodecRegistry(pojoCodecRegistry);
+}
 }

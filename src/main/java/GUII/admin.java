@@ -27,6 +27,8 @@ public class admin extends javax.swing.JFrame {
     panelData = jPanel3;
     scrollData = jScrollPane1;// WAJIB di-assign sebelum showData dipanggil
     
+    btn_cari.addActionListener((evt) -> btn_cariActionPerformed(evt));
+    
     showData(""); // HARUS PALING TERAKHIR
 }
 
@@ -130,6 +132,11 @@ public class admin extends javax.swing.JFrame {
         });
 
         btn_cari.setText("Cari");
+        btn_cari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cariActionPerformed(evt);
+            }
+        });
 
         btn_refresh.setText("Refresh");
         btn_refresh.addActionListener(new java.awt.event.ActionListener() {
@@ -165,7 +172,11 @@ public class admin extends javax.swing.JFrame {
             }
         });
 
-        jTextField4.setText("jTextField4");
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -283,7 +294,13 @@ public class admin extends javax.swing.JFrame {
 
     private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
         // TODO add your handling code here:
-        refresAll();
+        txtUID.setText("");
+    txtKRID.setText("");
+    txtKRName.setText("");
+    txtKRDept.setSelectedIndex(0);
+    btnSave.setEnabled(true);
+    btnUpdate.setEnabled(false);
+    showData("");
     }//GEN-LAST:event_btn_refreshActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -293,13 +310,13 @@ public class admin extends javax.swing.JFrame {
     private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
         // TODO add your handling code here:
         Member K = new Member();
-        K.setUidRfid(txtUID.getText());
-        K.setIdmember(txtKRID.getText()); 
-        K.setnamamember(txtKRName.getText());
-        K.setpaket(txtKRDept.getSelectedItem().toString()); 
-        MemberService service = new MemberService();
-        service.tambahMember(K);
-        showData("");
+    K.setUidrfid(txtUID.getText());
+    K.setIdmember(txtKRID.getText()); 
+    K.setNamamember(txtKRName.getText());
+    K.setPaket(txtKRDept.getSelectedItem().toString()); 
+    MemberService service = new MemberService();
+    service.tambahMember(K);
+    showData("");
     }//GEN-LAST:event_btn_saveActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -307,7 +324,14 @@ public class admin extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
-        // TODO add your handling code here:
+       Member K = new Member();
+    K.setUidrfid(txtUID.getText());
+    K.setIdmember(txtKRID.getText());
+    K.setNamamember(txtKRName.getText());
+    K.setPaket(txtKRDept.getSelectedItem().toString());
+    MemberService service = new MemberService();
+    service.updateMember(K);
+    showData("");
     }//GEN-LAST:event_btn_updateActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -317,6 +341,16 @@ public class admin extends javax.swing.JFrame {
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
+        // TODO add your handling code here:
+        String keyword = jTextField4.getText();
+        showData(keyword);
+    }//GEN-LAST:event_btn_cariActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,9 +395,7 @@ public class admin extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 
-    private void refresAll() {
-        showData("");
-    }
+
 
 }
 

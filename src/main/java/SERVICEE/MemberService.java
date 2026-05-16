@@ -14,7 +14,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GridLayout;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -117,15 +116,15 @@ public class MemberService {
                 ));
 
                 // Membuat Label Nama & Set warna teks jadi Putih
-                JLabel lblNama = new JLabel("Nama: " + k.getnamamember());
+                JLabel lblNama = new JLabel("Nama: " + k.getNamamember());
                 lblNama.setForeground(Color.WHITE);
 
                 // Membuat Label ID Karyawan & Set warna teks jadi Putih
-                JLabel lblIDK = new JLabel("ID Karyawan: " + k.getidmember());
+                JLabel lblIDK = new JLabel("ID Karyawan: " + k.getIdmember());
                 lblIDK.setForeground(Color.WHITE);
 
                 // Membuat Label Departemen & Set warna teks jadi Putih
-                JLabel lblDept = new JLabel("Paket: " + k.getpaket());
+                JLabel lblDept = new JLabel("Paket: " + k.getPaket());
                 lblDept.setForeground(Color.WHITE);
 
                 // Membuat panel kontrol 1 baris 2 kolom, berisi tombol edit dan hapus
@@ -136,10 +135,10 @@ public class MemberService {
                 tombolEdit.setBackground(Color.ORANGE);
                 tombolEdit.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 tombolEdit.addActionListener((ActionEvent e) -> {
-                admin.txtUID.setText(k.getuidrfid());
-                admin.txtKRID.setText(k.getidmember());
-                admin.txtKRName.setText(k.getnamamember());
-                admin.txtKRDept.setSelectedItem(k.getpaket());
+                admin.txtUID.setText(k.getUidrfid());
+                admin.txtKRID.setText(k.getIdmember());
+                admin.txtKRName.setText(k.getNamamember());
+                admin.txtKRDept.setSelectedItem(k.getPaket());
                 admin.btnUpdate.setEnabled(true);
                 admin.btnSave.setEnabled(false);
                 admin.showData("");
@@ -152,7 +151,7 @@ public class MemberService {
                     Object[] options = {"Ya, Hapus", "Batal"};
                     int choice = JOptionPane.showOptionDialog(
                             null, // Parent component
-                            "Apakah Anda ingin menyimpan data "+k.getnamamember()+"?", // Message
+                            "Apakah Anda ingin menyimpan data "+k.getNamamember()+"?", // Message
                             "Konfirmasi Pengelolaan", // Title
                             JOptionPane.YES_NO_OPTION, // Option type
                             JOptionPane.QUESTION_MESSAGE, // Message type
@@ -162,7 +161,7 @@ public class MemberService {
                     );
 
                     switch (choice) {
-                        case JOptionPane.YES_OPTION -> hapusMember(k.getidmember());
+                        case JOptionPane.YES_OPTION -> hapusMember(k.getIdmember());
                         case JOptionPane.NO_OPTION -> System.out.println("User memilih: Batal");
                         default -> {
                         }
@@ -173,10 +172,10 @@ public class MemberService {
                 controlPanel.add(tombolDelete);
 
                 // Memasukkan label ke dalam cardPanel (box orange)
-                lblIDM = new JLabel("ID Member: " + k.getidmember());
+                lblIDM = new JLabel("ID Member: " + k.getIdmember());
                 lblIDM.setForeground(Color.WHITE);
 
-                lblPkt = new JLabel("Paket: " + k.getpaket());
+                lblPkt = new JLabel("Paket: " + k.getPaket());
                 lblPkt.setForeground(Color.WHITE);
 
                 cardPanel.add(lblNama);
@@ -195,6 +194,8 @@ public class MemberService {
             panelTarget.revalidate();
             panelTarget.repaint();
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error tampilMember: " + e.getMessage());
         }
     }
 
@@ -210,7 +211,7 @@ public class MemberService {
         // Get all fields from the Karyawan class
         for (Field field : Member.class.getDeclaredFields()) {
             // Skip the uidRfid field and non-string fields if necessary
-            if (field.getName().equals("uidRfid")) {
+            if (field.getName().equals("uidrfid")) {
                 continue;
             }
             filters.add(Filters.regex(field.getName(), key, "i"));
@@ -226,7 +227,7 @@ public class MemberService {
      * @param newK
      */
     public void updateMember(Member newK) {
-        Bson filter = Filters.eq("idmember", newK.getidmember());
+        Bson filter = Filters.eq("idmember", newK.getIdmember());
         Member k = DAO.findOne(filter);
         if (k != null) {
             DAO.update(filter, newK);
@@ -244,7 +245,7 @@ public class MemberService {
         Bson filter = Filters.eq("idmember", idM);
         DAO.delete(filter); // Menggunakan deleteOne [6]
         admin.showData("");
-        JOptionPane.showMessageDialog(null, "Data karyawan berhasil dihapus.");
+        JOptionPane.showMessageDialog(null, "Data member berhasil dihapus.");
     }
 
 }
