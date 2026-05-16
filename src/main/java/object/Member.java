@@ -1,76 +1,44 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package object;
 
-/**
- *
- * @author ADVAN
- */
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
 public class Member {
+    @BsonProperty("uidrfid")
     private String uidrfid;
+    
+    @BsonProperty("namamember")
     private String namamember;
+    
+    @BsonProperty("idmember")
     private String idmember;
+    
+    @BsonProperty("paket")
     private String paket;
-    
-    public Member(){
-    }
-    
+
+    public Member() {}
+
     public Member(String uidrfid, String namamember, String idmember, String paket) {
         this.uidrfid = uidrfid;
         this.namamember = namamember;
         this.idmember = idmember;
         this.paket = paket;
     }
-    
-    
-    public String tostString(){
-        return "Member{"
-                + "uidrfid" + uidrfid
-                + ", namamember" + namamember
-                + ",idmember" + idmember
-                + ", paket" + paket
-                + '}';
-    }
-    public String getuidrfid(){
-        return uidrfid;
-    }
-    
-    public void setuidrfid(String uidrfid){
-        this.uidrfid = uidrfid;
-    }
-    
-    public  String getnamamember(){
-        return namamember;
-    }
-    
-    public void setnamamember(String namamember){
-        this.namamember = namamember;
-    }
-    
-    public String getidmember(){
-        return idmember;
-    
-    }
-    
-    public void setidmember(String idmember){
-       this.idmember = idmember;
-    }
-    
-    public String getpaket(){
-        return paket;
-    }
-    
-    public void setpaket(String paket){
-        this.paket = paket;
-    }
 
-    public void setIdmember(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public String getUidrfid() { return uidrfid; }
+    public void setUidrfid(String uidrfid) { this.uidrfid = uidrfid; }
 
-    public void setUidRfid(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String getNamamember() { return namamember; }
+    public void setNamamember(String namamember) { this.namamember = namamember; }
+
+    public String getIdmember() { return idmember; }
+    public void setIdmember(String idmember) { this.idmember = idmember; }
+
+    public String getPaket() { return paket; }
+    public void setPaket(String paket) { this.paket = paket; }
+
+    @Override
+    public String toString() {
+        return "Member{uidrfid=" + uidrfid + ", namamember=" + namamember + 
+               ", idmember=" + idmember + ", paket=" + paket + '}';
     }
 }
