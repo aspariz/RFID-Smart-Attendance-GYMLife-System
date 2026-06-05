@@ -9,7 +9,7 @@ public class admin extends javax.swing.JFrame {
     public static javax.swing.JTextField txtUID;
     public static javax.swing.JTextField txtKRID;
     public static javax.swing.JTextField txtKRName;
-    public static javax.swing.JComboBox<String> txtKRDept;
+    public static javax.swing.JComboBox<String> txtKRPket;
     public static javax.swing.JButton btnSave;
     public static javax.swing.JButton btnUpdate;
     public static javax.swing.JPanel panelData;
@@ -21,7 +21,7 @@ public class admin extends javax.swing.JFrame {
     txtUID = jTextField1;
     txtKRID = jTextField2;
     txtKRName = jTextField3;
-    txtKRDept = jComboBox1;
+    txtKRPket = jComboBox1;
     btnSave = btn_save;
     btnUpdate = btn_update;
     panelData = jPanel3;
@@ -297,7 +297,7 @@ public class admin extends javax.swing.JFrame {
         txtUID.setText("");
     txtKRID.setText("");
     txtKRName.setText("");
-    txtKRDept.setSelectedIndex(0);
+    txtKRPket.setSelectedIndex(0);
     btnSave.setEnabled(true);
     btnUpdate.setEnabled(false);
     showData("");
@@ -313,7 +313,7 @@ public class admin extends javax.swing.JFrame {
     K.setUidrfid(txtUID.getText());
     K.setIdmember(txtKRID.getText()); 
     K.setNamamember(txtKRName.getText());
-    K.setPaket(txtKRDept.getSelectedItem().toString()); 
+    K.setPaket(txtKRPket.getSelectedItem().toString()); 
     MemberService service = new MemberService();
     service.tambahMember(K);
     showData("");
@@ -328,7 +328,7 @@ public class admin extends javax.swing.JFrame {
     K.setUidrfid(txtUID.getText());
     K.setIdmember(txtKRID.getText());
     K.setNamamember(txtKRName.getText());
-    K.setPaket(txtKRDept.getSelectedItem().toString());
+    K.setPaket(txtKRPket.getSelectedItem().toString());
     MemberService service = new MemberService();
     service.updateMember(K);
     showData("");
@@ -351,7 +351,8 @@ public class admin extends javax.swing.JFrame {
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
-
+// kode Java untuk menjalankan aplikasi desktop dengan GUI 
+//(Graphical User Interface) menggunakan Java Swing.
     /**
      * @param args the command line arguments
      */

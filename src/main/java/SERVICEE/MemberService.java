@@ -43,7 +43,7 @@ public class MemberService {
     }
 
     /**
-     * 1.CREATE: Fungsi untuk menyimpan data karyawan baru ke MongoDB [2], [3]
+     * 1.CREATE: Fungsi untuk menyimpan data member baru ke MongoDB [2], [3]
      *
      * @param memberBaru
      */
@@ -51,8 +51,8 @@ public class MemberService {
         DAO.save(memberBaru); // Memanggil insertOne melalui GenericDAO [3]
     }
 
-    public void tambahMember(String uidRfid, String namamember, String idmember, String paket) {
-        Member memberBaru = new Member(uidRfid, namamember, idmember, paket);
+    public void tambahMember(String uidRfid, String idmember, String namamember, String paket) {
+        Member memberBaru = new Member(uidRfid, idmember,namamember,  paket);
         DAO.save(memberBaru); // Memanggil insertOne melalui GenericDAO [3]
     }
 
@@ -68,7 +68,7 @@ public class MemberService {
     }
 
     /**
-     * 2.READ (All): Fungsi untuk mengambil semua data karyawan [5], [6]
+     * 2.READ (All): Fungsi untuk mengambil semua data member [5], [6]
      *
      * @param panelTarget
      * @param key
@@ -105,7 +105,7 @@ public class MemberService {
         try {
             for (Member k : daftarMember) {
                 // Membuat panel 'Card' (box orange) untuk 1 karyawan
-                // Layout 4 baris 1 kolom agar kolor berisi Nama,ID, Departemen, panel control 
+                // Layout 4 baris 1 kolom agar kolor berisi Uidrdif,ID, Nama member, jenis paket, panel control 
                 JPanel cardPanel = new JPanel(new GridLayout(4, 1, 0, 0));
                 cardPanel.setBackground(new Color(237, 125, 49)); // Warna background orange
 
@@ -138,7 +138,7 @@ public class MemberService {
                 admin.txtUID.setText(k.getUidrfid());
                 admin.txtKRID.setText(k.getIdmember());
                 admin.txtKRName.setText(k.getNamamember());
-                admin.txtKRDept.setSelectedItem(k.getPaket());
+                admin.txtKRPket.setSelectedItem(k.getPaket());
                 admin.btnUpdate.setEnabled(true);
                 admin.btnSave.setEnabled(false);
                 admin.showData("");
