@@ -7,6 +7,7 @@ package SERVICEE;
 //import com.ituhn.pemkom2.gui.Adminae;
 import GUII.admin;
 import DAOO.GenericDAO;
+import UTILY.SecurityUtils;
 //import com.ituhn.pemkom2.objects.Karyawan;
 //import com.mycompany.gymlife1.object.Member;
 import com.mongodb.client.model.Filters;
@@ -25,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import object.Member;
 import org.bson.conversions.Bson;
+import UTILY.EncryptionUtils;
 
 /**
  *
@@ -51,8 +53,13 @@ public class MemberService {
         DAO.save(memberBaru); // Memanggil insertOne melalui GenericDAO [3]
     }
 
-    public void tambahMember(String uidRfid, String idmember, String namamember, String paket) {
-        Member memberBaru = new Member(uidRfid, idmember,namamember,  paket);
+    public void tambahMember(String uidRfid, 
+                             String idmember, 
+                             String namamember, 
+                             String paket) {
+        String hashedUID = SecurityUtils.getHash(uidRfid, SecurityUtils.SHA_256);
+        
+        Member memberBaru = new Member(hashedUID, idmember, namamember,  paket);
         DAO.save(memberBaru); // Memanggil insertOne melalui GenericDAO [3]
     }
 

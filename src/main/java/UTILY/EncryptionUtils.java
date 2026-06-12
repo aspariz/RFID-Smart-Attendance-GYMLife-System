@@ -24,38 +24,37 @@ public class EncryptionUtils {
     private static final byte[] SECRET_KEY = KEY.getBytes();
     
     
-    public static String encrypt (String value){
+    public static String encrypt (String plainText) throws Exception {
         try {
-            SecretKeySpec spec = new SecretKeySpec(SECRET_KEY, ALGORITHM);
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, spec);
+            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY, ALGORITHM);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             
-            byte[] encryptedBytes = cipher.doFinal(value.getBytes());
+            byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
             return Base64.getEncoder().encodeToString(encryptedBytes);
-        } catch (InvalidKeyException | NoSuchAlgorithmException | BadPaddingException 
-                     | IllegalBlockSizeException| NoSuchPaddingException e) {
-            System.err.println("error saat enkripsi:" + e.getMessage()); 
-            return null;
+            } catch (InvalidKeyException | NoSuchAlgorithmException | 
+                BadPaddingException | IllegalBlockSizeException | 
+                NoSuchPaddingException e) {
+            System.err.println("Error saat enkripsi: " + e.getMessage());
+                return null;
         }
     }
     
-    public static String decrypt(String encryptedValue){
+    public static String decrypt(String encryptedText) throws Exception{
         try {
-             SecretKeySpec spec = new SecretKeySpec(SECRET_KEY, ALGORITHM);
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, spec);
+            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY, ALGORITHM);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
             
-            byte[] decodeBytes = Base64.getDecoder().decode(encryptedValue);
+            byte[] decodeBytes = Base64.getDecoder().decode(encryptedText);
             byte[] decryptedBytes = cipher.doFinal(decodeBytes);
             return new String (decryptedBytes);
-
-        } catch (InvalidKeyException | NoSuchAlgorithmException | BadPaddingException
-                |IllegalBlockSizeException | NoSuchPaddingException e) {
-            
-            System.err.println("error saat deskripsi:" + e.getMessage());
+        }catch (InvalidKeyException | NoSuchAlgorithmException | 
+                BadPaddingException | IllegalBlockSizeException | 
+                NoSuchPaddingException e) {
+            System.err.println("Error saat enkripsi: " + e.getMessage());
             return null;
         }
-    }
-    
+    }   
 }
 
