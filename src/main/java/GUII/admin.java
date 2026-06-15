@@ -318,14 +318,16 @@ public class admin extends javax.swing.JFrame {
 
     private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
         // TODO add your handling code here:
-        Member K = new Member();
-    K.setUidrfid(txtUID.getText());
-    K.setIdmember(txtKRID.getText()); 
-    K.setNamamember(txtKRName.getText());
-    K.setPaket(txtKRPket.getSelectedItem().toString()); 
-    MemberService service = new MemberService();
-    service.tambahMember(K);
-    showData("");
+      MemberService service = new MemberService();
+
+        service.tambahMember(
+            txtUID.getText(),
+            txtKRID.getText(),
+            txtKRName.getText(),
+            txtKRPket.getSelectedItem().toString()
+    );
+
+showData("");
     }//GEN-LAST:event_btn_saveActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed

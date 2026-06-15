@@ -49,18 +49,21 @@ public class MemberService {
      *
      * @param memberBaru
      */
-    public void tambahMember(Member memberBaru) {
-        DAO.save(memberBaru); // Memanggil insertOne melalui GenericDAO [3]
-    }
-
+    
     public void tambahMember(String uidRfid, 
                              String idmember, 
                              String namamember, 
                              String paket) {
-        String hashedUID = SecurityUtils.getHash(uidRfid, SecurityUtils.SHA_256);
+        try{
+        String encryptedUID = EncryptionUtils.encrypt(uidRfid);
         
-        Member memberBaru = new Member(hashedUID, idmember, namamember,  paket);
+        Member memberBaru = new Member(encryptedUID, idmember, namamember,  paket);
+        System.out.println("UID ASLI : " + uidRfid);
+        System.out.println("UID AES  : " + encryptedUID);
         DAO.save(memberBaru); // Memanggil insertOne melalui GenericDAO [3]
+    } catch (Exception e){
+        e.printStackTrace();
+    }
     }
 
     /**

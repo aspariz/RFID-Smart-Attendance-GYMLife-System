@@ -41,7 +41,7 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Member{uidrfid=" + uidrfid + ", idmember=" + idmember + 
+        return "Member uidrfid=" + uidrfid + ", idmember=" + idmember + 
                ", namamember=" + namamember + ", paket=" + paket + '}';
     }
 }

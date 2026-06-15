@@ -20,7 +20,7 @@ import javax.crypto.NoSuchPaddingException;
 
 public class EncryptionUtils {
     private static final String ALGORITHM = "AES";
-    private static final String KEY = System.getProperty("KEY");
+    private static final String KEY = "GYMLIFE123456789";
     private static final byte[] SECRET_KEY = KEY.getBytes();
     
     
@@ -40,7 +40,7 @@ public class EncryptionUtils {
         }
     }
     
-    public static String decrypt(String encryptedText) throws Exception{
+    public static String decrypt(String encryptedText) {
         try {
             SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY, ALGORITHM);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
