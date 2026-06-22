@@ -277,13 +277,7 @@ public class AttendancePage extends javax.swing.JFrame {
     MemberService memberService = new MemberService();
     LogAbsensiService logService = new LogAbsensiService();
 
-    List<Member> members = memberService.cariMember(inputUid);
-
-    Member member = null;
-
-    if (!members.isEmpty()) {
-        member = members.get(0);
-    }
+    Member member = memberService.findByUid(inputUid);
 
     System.out.println(
             "Member ditemukan: "

@@ -231,9 +231,17 @@ public class MemberService {
         return results;
     }
     
-    public void findByUid(String hashedUid){
-        Bson filter = Filters.eq("uidRfid", hashedUid);
-    }
+    public Member findByUid(String uid){
+
+        List<Member> results =
+                DAO.findMany(Filters.eq("uidrfid", uid));
+
+        if(results.isEmpty()){
+            return null;
+        }
+
+    return results.get(0);
+}
 
     /**
      * 4.UPDATE: Memperbarui data karyawan menggunakan filter Bson [5], [6]
