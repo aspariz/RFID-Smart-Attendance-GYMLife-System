@@ -1,4 +1,4 @@
-package com.mycompany.gymlife1.object;
+package object;
 
 import java.time.LocalDateTime;
 

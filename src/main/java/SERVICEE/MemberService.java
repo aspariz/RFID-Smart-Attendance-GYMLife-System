@@ -230,6 +230,10 @@ public class MemberService {
         List<Member> results = DAO.findMany(Filters.or(filters));
         return results;
     }
+    
+    public void findByUid(String hashedUid){
+        Bson filter = Filters.eq("uidRfid", hashedUid);
+    }
 
     /**
      * 4.UPDATE: Memperbarui data karyawan menggunakan filter Bson [5], [6]

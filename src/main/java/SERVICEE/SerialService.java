@@ -130,4 +130,10 @@ private static SerialService instance;
         return activePort != null && activePort.isOpen();
     }
    
+
+
+   public void SimulateBroadcast(String dummyData) {
+        System.out.println("SIMULASI: MENERIMA " + dummyData);
+        broadcast(dummyData);
+    }
 }

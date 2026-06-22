@@ -4,7 +4,17 @@
  */
 package GUII;
 import SERVICEE.DigitalClockService;
+import SERVICEE.MemberService;
+import SERVICEE.SerialService;
+import SERVICEE.LogAbsensiService;
+import UTILY.EncryptionUtils;
+import UTILY.SecurityUtils;
+import GUII.PANEL.Settings;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import object.Member;
+import java.util.List;
+
 
 /**
  *
@@ -13,14 +23,19 @@ import javax.swing.JLabel;
 public class AttendancePage extends javax.swing.JFrame {
     
     private Thread clockThread;
+    
+    Thread delayThread;
 
     /**
      * Creates new form AttendancePage
      */
     public AttendancePage() {
-        initComponents();
-        initClock(jLabeljam);
-    }
+    initComponents();
+    initClock(jLabeljam);
+    jLabel1.setText(Settings.prefs.get("LAST_STATUS", Settings.statusAbsen));
+    updateLabelWithDelay(jLabel1, "");
+    setupAttendanceWorkflow(); // ← perbaiki di sini
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,12 +52,14 @@ public class AttendancePage extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        txtinput = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,9 +105,9 @@ public class AttendancePage extends javax.swing.JFrame {
             .addGap(0, 56, Short.MAX_VALUE)
         );
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtinput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtinputActionPerformed(evt);
             }
         });
 
@@ -125,11 +142,11 @@ public class AttendancePage extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,6 +163,16 @@ public class AttendancePage extends javax.swing.JFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
+        jButton1.setText("UJI");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setBackground(new java.awt.Color(51, 255, 204));
+        jLabel1.setText("jLabel1");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -154,16 +181,20 @@ public class AttendancePage extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(156, 156, 156)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(104, Short.MAX_VALUE))
+                                .addComponent(txtinput, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton1))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,12 +202,16 @@ public class AttendancePage extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtinput, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1)))
                 .addGap(17, 17, 17)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -186,14 +221,14 @@ public class AttendancePage extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(184, 184, 184)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addContainerGap(197, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(102, 102, 102)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -217,9 +252,76 @@ public class AttendancePage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtinputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtinputActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        String dummyUID = txtinput.getText();
+        SerialService.getInstance().SimulateBroadcast(dummyUID);
+    }//GEN-LAST:event_txtinputActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+  String inputUid = txtinput.getText().trim();
+
+    System.out.println("Input UID: " + inputUid);
+
+    if (inputUid.isEmpty()) {
+        jLabel1.setText("Input tidak boleh kosong!");
+        return;
+    }
+
+    String hashedUid = SecurityUtils.getHash(
+            inputUid,
+            SecurityUtils.SHA_256
+    );
+
+    MemberService memberService = new MemberService();
+    LogAbsensiService logService = new LogAbsensiService();
+
+    List<Member> members = memberService.cariMember(inputUid);
+
+    Member member = null;
+
+    if (!members.isEmpty()) {
+        member = members.get(0);
+    }
+
+    System.out.println(
+            "Member ditemukan: "
+            + (member != null ? member.getNamamember() : "NULL")
+    );
+
+    logService.simpanLog(
+            hashedUid,
+            Settings.prefs.get("LAST_STATUS", Settings.statusAbsen)
+    );
+
+    if (member != null) {
+
+        System.out.println("UIDRFID: " + member.getUidrfid());
+        System.out.println("Paket: " + member.getPaket());
+
+        jLabel3.setText("Nama Member : " + member.getNamamember());
+        jLabel4.setText("ID Member : " + member.getIdmember());
+        jLabel5.setText("Paket : " + member.getPaket());
+
+        updateLabelWithDelay(
+                jLabel1,
+                "Absensi diterima. Terimakasih"
+        );
+
+    } else {
+
+        jLabel3.setText("Nama Member :");
+        jLabel4.setText("ID Member :");
+        jLabel5.setText("Paket :");
+
+        updateLabelWithDelay(
+                jLabel1,
+                "Kartu Tidak Terdaftar!"
+        );
+    }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,6 +357,8 @@ public class AttendancePage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -266,7 +370,7 @@ public class AttendancePage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtinput;
     // End of variables declaration//GEN-END:variables
 
     private void initClock(JLabel lblJam) {
@@ -289,6 +393,60 @@ public class AttendancePage extends javax.swing.JFrame {
         
         System.out.println("Memulai: " + clockThread.getName() + " (Daemon: " + clockThread.isDaemon() + ")");
     }
+    
+    private void setupAttendanceWorkflow() {
+    MemberService memberService = new MemberService();
+    LogAbsensiService logService = new LogAbsensiService();
 
+    SerialService.getInstance().addHandler(dataRfid -> {
+        String hashedUid = SecurityUtils.getHash(dataRfid, SecurityUtils.SHA_256);
+        Member member = (Member) memberService.cariMember(hashedUid); // ← Member, bukan MemberService
+        boolean isSuccess = (member != null);
+
+        logService.simpanLog(hashedUid, Settings.prefs.get("LAST_STATUS", Settings.statusAbsen));
+
+        SwingUtilities.invokeLater(() -> {
+            if (isSuccess) {
+                // Isi data member – sesuaikan nama getter dengan class Member Anda
+                jLabel3.setText("Nama Member : " + member.getNamamember());
+                jLabel4.setText("ID Member   : " + member.getIdmember());
+                jLabel5.setText("Paket       : " + member.getPaket());
+                updateLabelWithDelay(jLabel1, "Absensi diterima. Terimakasih");
+            } else {
+                // Reset tampilan jika gagal
+                jLabel3.setText("Nama Member : -");
+                jLabel4.setText("ID Member   : -");
+                jLabel5.setText("Paket       : -");
+                updateLabelWithDelay(jLabel1, "Kartu Tidak Terdaftar!");
+            }
+        });
+    });
+}
+
+    private void updateLabelWithDelay(JLabel comp, String info) {
+        if (delayThread != null && delayThread.isAlive()) {
+            delayThread.interrupt();
+        }
+
+        delayThread = new Thread(() -> {
+            comp.setText(info); 
+            try {
+                for (int i = 3; i >= 1; i--) {
+                    Thread.sleep(1000);
+                }
+                
+                SwingUtilities.invokeLater(() -> comp.setText(Settings.prefs.get("LAST_STATUS", Settings.statusAbsen)));
+
+            } catch (InterruptedException e) {
+                // Penanganan jika thread dihentikan paksa (Interrupted)
+            }
+        });
+
+        delayThread.setName("delayThread"); 
+        delayThread.setDaemon(true);         
+        delayThread.start();
+    }
+
+    
     
 }
