@@ -4,42 +4,43 @@
  */
 package GUII.PANEL;
 
+import GUII.AdminPage;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+import PALETTE.SlidingLanguageTooggle;
 import PALETTE.SlidingStatusToogle;
+import SERVICEE.i18nService;
 import java.awt.event.ActionEvent;
+import java.util.Locale;
 import java.util.prefs.Preferences;
 /**
  *
  * @author bsame
  */
-public class Settings extends javax.swing.JPanel {
+public class Settings extends javax.swing.JPanel implements i18nService.I18nChangeListener {
     public static String statusAbsen;
-    public static Preferences prefs = Preferences.systemNodeForPackage(Settings.class);
+    public static String statusLang;
+    public static Preferences prefs = Preferences.userNodeForPackage(Settings.class);
 
     /**
      * Creates new form Settings
      */
-    public Settings() {
-        initComponents();
-        // 1. Membuat objek tombol geser secara manual lewat kode
-        slidingStatusToggle1 = new SlidingStatusToogle();
-        
-        // 2. Mengatur ukuran dan posisi tombol (Silakan disesuaikan kalau kurang pas)
-        // 2. Mengatur ukuran dan posisi tombol (sesuaikan jika perlu)
-        slidingStatusToggle1.setBounds(90, 110, 220, 45);
-        this.setLayout(null); // Memaksa layout bebas agar setBounds berfungsi
-        this.add(slidingStatusToggle1); // Memasukkan tombol ke dalam panel Settings
+   public Settings() {
+    // Load bahasa terakhir
+    i18nService.setLocale(Locale.of(prefs.get("LANGUAGE", "id")));
 
-        // 3. Menghubungkan tombol dengan fungsi klik
-        slidingStatusToggle1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SlidingStatusToggle1ActionPerformed(evt);
-            }
-        });
-
-        // 4. Membaca status terakhir dari preferences
-        statusAbsen = prefs.get("LAST_STATUS", "Masuk");
-        slidingStatusToggle1.setStatusByString(statusAbsen);
-    }
+    initComponents();
+    // Set posisi slider sesuai bahasa yang disimpan
+    statusLang = prefs.get("LANGUAGE", "id");
+    slidingLanguageTooggle1.setSelectedLanguageIndexByString(statusLang);
+    slidingLanguageTooggle1.addActionListener(this::SlidingLanguageToggle1ActionPerformed);
+    
+    i18nService.registerListener(this);
+}
 
 
 
@@ -52,23 +53,83 @@ public class Settings extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        slidingLanguageTooggle1 = new PALETTE.SlidingLanguageTooggle();
+        jPanel1 = new javax.swing.JPanel();
+        slidingStatusToogle1 = new PALETTE.SlidingStatusToogle();
 
-    private void SlidingStatusToggle1ActionPerformed(java.awt.event.ActionEvent evt) {
-        statusAbsen = slidingStatusToggle1.getStatusString();
-        prefs.put("LAST_STATUS", statusAbsen);
-    }
+        setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setLayout(new java.awt.GridLayout(2, 2, 15, 15));
+
+        jPanel3.setBackground(new java.awt.Color(255, 204, 204));
+
+        slidingLanguageTooggle1.setText("slidingLanguageTooggle1");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(284, 284, 284)
+                .addComponent(slidingLanguageTooggle1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(402, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(104, Short.MAX_VALUE)
+                .addComponent(slidingLanguageTooggle1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
+        );
+
+        jPanel2.add(jPanel3);
+
+        jPanel1.setBackground(new java.awt.Color(51, 255, 255));
+
+        slidingStatusToogle1.setText("slidingStatusToogle1");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(377, 377, 377)
+                .addComponent(slidingStatusToogle1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(423, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(slidingStatusToogle1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel1);
+
+        jTabbedPane1.addTab("tab1", jPanel2);
+
+        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+    }// </editor-fold>//GEN-END:initComponents
+ private void SlidingLanguageToggle1ActionPerformed(java.awt.event.ActionEvent evt) {
+    statusLang = slidingLanguageTooggle1.getSelectedLanguageString();
+    prefs.put("LANGUAGE", statusLang);
+    i18nService.setLocale(Locale.of(statusLang));
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private PALETTE.SlidingLanguageTooggle slidingLanguageTooggle1;
+    private PALETTE.SlidingStatusToogle slidingStatusToogle1;
     // End of variables declaration//GEN-END:variables
-    private SlidingStatusToogle slidingStatusToggle1;
+    @Override
+    public void onLanguageChanged() {
+    SwingUtilities.updateComponentTreeUI(this);
+    repaint();
+}
 }

@@ -3,10 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUII;
+
+import GUII.PANEL.Settings;
 import SERVICEE.DigitalClockService;
 import SERVICEE.MemberService;
 import SERVICEE.SerialService;
 import SERVICEE.LogAbsensiService;
+import SERVICEE.i18nService;
 import UTILY.EncryptionUtils;
 import UTILY.SecurityUtils;
 import GUII.PANEL.Settings;
@@ -14,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import object.Member;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -30,6 +34,7 @@ public class AttendancePage extends javax.swing.JFrame {
      * Creates new form AttendancePage
      */
     public AttendancePage() {
+    i18nService.setLocale(Locale.of(Settings.prefs.get("LANGUAGE", "id")));
     initComponents();
     initClock(jLabeljam);
     jLabel1.setText(Settings.prefs.get("LAST_STATUS", Settings.statusAbsen));
@@ -68,7 +73,7 @@ public class AttendancePage extends javax.swing.JFrame {
         jLabeljam.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabeljam.setForeground(new java.awt.Color(204, 51, 0));
         jLabeljam.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabeljam.setText("Jumat,  5 Juni 2026, 12:12:12");
+        jLabeljam.setText(i18nService.get("ui.date.format"));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -90,7 +95,7 @@ public class AttendancePage extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setText("Silahkan Tap Kartu Anda");
+        jLabel2.setText(i18nService.get("ui.welcome"));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -129,10 +134,11 @@ public class AttendancePage extends javax.swing.JFrame {
         );
 
         jLabel3.setText("Nama Member :");
+        jLabel3.setToolTipText(i18nService.get("ui.label.name"));
 
-        jLabel4.setText("ID Member :");
+        jLabel4.setText(i18nService.get("ui.label.id"));
 
-        jLabel5.setText("Paket :");
+        jLabel5.setText(i18nService.get("ui.label.paket"));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -163,7 +169,7 @@ public class AttendancePage extends javax.swing.JFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jButton1.setText("UJI");
+        jButton1.setText(i18nService.get("ui.btn.simulation"));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -210,7 +216,7 @@ public class AttendancePage extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(21, 21, 21))
         );
 
@@ -221,14 +227,14 @@ public class AttendancePage extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(184, 184, 184)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(197, Short.MAX_VALUE))
+                .addContainerGap(169, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(102, 102, 102)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -401,10 +407,11 @@ public class AttendancePage extends javax.swing.JFrame {
 
         SwingUtilities.invokeLater(() -> {
             if (isSuccess) {
+                logService.simpanLog(hashedUid, Settings.prefs.get("LAST_STATUS", Settings.statusAbsen));
                 // Isi data member – sesuaikan nama getter dengan class Member Anda
-                jLabel3.setText("Nama Member : " + member.getNamamember());
-                jLabel4.setText("ID Member   : " + member.getIdmember());
-                jLabel5.setText("Paket       : " + member.getPaket());
+                jLabel3.setText(i18nService.get("ui.label.nama")+": " + member.getNamamember() + "");
+                jLabel3.setText(i18nService.get("ui.label.id")+": " + member.getIdmember()+ "");
+                jLabel3.setText(i18nService.get("ui.label.paket")+": " + member.getPaket()+ "");
                 updateLabelWithDelay(jLabel1, "Absensi diterima. Terimakasih");
             } else {
                 // Reset tampilan jika gagal

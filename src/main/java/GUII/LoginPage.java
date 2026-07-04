@@ -4,11 +4,16 @@
  */
 package GUII;
 
+import GUII.PANEL.Settings;
 import SERVICEE.AuthService;
 import UTILY.EncryptionUtils;
 import UTILY.SecurityUtils;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
+import SERVICEE.i18nService;
+import java.util.Locale;
+
+
 /**
  *
  * @author bsame
@@ -20,6 +25,7 @@ public class LoginPage extends javax.swing.JFrame {
      */
     public LoginPage() {
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        i18nService.setLocale(Locale.of(Settings.prefs.get("LANGUAGE", "id")));
         initComponents();
         txtuser.requestFocus();
     }
@@ -63,12 +69,12 @@ public class LoginPage extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
-        jLabel1.setText("Username");
+        jLabel1.setText(i18nService.get("ui.username"));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
-        jLabel2.setText("Password");
+        jLabel2.setText(i18nService.get("ui.sandi"));
 
-        btnGO.setText("LOGIN");
+        btnGO.setText(i18nService.get("ui.btn.masuk"));
         btnGO.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGOActionPerformed(evt);
@@ -198,10 +204,10 @@ public class LoginPage extends javax.swing.JFrame {
         String username = txtuser.getText();
         String password = new String(txtpw.getPassword());
         if (username.isEmpty()){
-            JOptionPane.showMessageDialog(this, "mohon isi username");
+            JOptionPane.showMessageDialog(this,i18nService.get("ui.login.fillusername"));
             txtuser.requestFocus();
         }else if (password.isEmpty()){
-            JOptionPane.showMessageDialog(this,"mohon isi password");
+            JOptionPane.showMessageDialog(this,i18nService.get("ui.login.fillpwd"));
             txtpw.requestFocus();
         }else{
             AuthService userService = new AuthService();
